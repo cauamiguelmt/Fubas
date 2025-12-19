@@ -7,22 +7,9 @@ export default {
 
     async execute(interaction: CommandInteraction) {
         
-        // Emojis de rank
-        const emojiXH = "<:rankingXHsmall2x:1451026695569281146>";
-        const emojiX = "<:rankingXsmall2x:1451026724513906698>"; 
-        const emojiSH = "<:rankingSHsmall2x:1451026620310753382>";
-        const emojiS = "<:rankingSsmall2x:1451026644579127476>"; 
-        const emojiA = "<:rankingAsmall2x:1451026496968986795>";
-        const emojiB = "<:rankingBsmall2x:1451026536512753727>";
-        const emojiC = "<:rankingCsmall2x:1451026570037956698>";
-        const emojiD = "<:rankingDsmall2x:1451026596986355803>";
-
-        const miss = "<:miss:1451028123553497281>";
-        const tab = "\u2003";
-
         // --- Simulação de score ---
         // 1. Informações do usuário
-        const user = "Loopyng";
+        const username = "Loopyng";
         const userPP = "4,863.27";
         const userRank = 1;
         const userUrl = "https://osu.ppy.sh/users/loopyng";
@@ -55,12 +42,26 @@ export default {
         const scoreCombo = 1337;
         const scoreMaxCombo = 1337;
         const scoreMisses = 0;
+        // ---------------------
+        
+        // Emojis de rank
+        const emojiXH = "<:rankingXHsmall2x:1451026695569281146>";
+        const emojiX = "<:rankingXsmall2x:1451026724513906698>"; 
+        const emojiSH = "<:rankingSHsmall2x:1451026620310753382>";
+        const emojiS = "<:rankingSsmall2x:1451026644579127476>"; 
+        const emojiA = "<:rankingAsmall2x:1451026496968986795>";
+        const emojiB = "<:rankingBsmall2x:1451026536512753727>";
+        const emojiC = "<:rankingCsmall2x:1451026570037956698>";
+        const emojiD = "<:rankingDsmall2x:1451026596986355803>";
+
+        const miss = "<:miss:1451028123553497281>";
+        const tab = "\u2003";
 
         const showPersonalBest = scoreTopPlayRanking <= 200 ? `### __Personal Best #${scoreTopPlayRanking}__` : "";
 
         const embed = new EmbedBuilder()
         .setAuthor({ 
-            name: `${user}: ${userPP}pp (#${userRank})`, 
+            name: `${username}: ${userPP}pp (#${userRank})`, 
             iconURL: 'https://iili.io/fcDwBEJ.png', // URL do Fubas.png
             url: userUrl
         })
