@@ -7,30 +7,75 @@ export default {
 
     async execute(interaction: CommandInteraction) {
         
+        // Emojis de rank
         const emojiXH = "<:rankingXHsmall2x:1451026695569281146>";
+        const emojiX = "<:rankingXsmall2x:1451026724513906698>"; 
+        const emojiSH = "<:rankingSHsmall2x:1451026620310753382>";
+        const emojiS = "<:rankingSsmall2x:1451026644579127476>"; 
+        const emojiA = "<:rankingAsmall2x:1451026496968986795>";
+        const emojiB = "<:rankingBsmall2x:1451026536512753727>";
+        const emojiC = "<:rankingCsmall2x:1451026570037956698>";
+        const emojiD = "<:rankingDsmall2x:1451026596986355803>";
+
         const miss = "<:miss:1451028123553497281>";
         const tab = "\u2003";
-        const date = new Date('2025-12-18T01:00:00Z');
-        const relativeTime = time(date, TimestampStyles.RelativeTime);
+
+        // --- Simulação de score ---
+        // 1. Informações do usuário
+        const user = "Loopyng";
+        const userPP = "4,863.27";
+        const userRank = 1;
+        const userUrl = "https://osu.ppy.sh/users/loopyng";
+        
+        // 2. Informções do score
+        // 2.1. Relacionadas ao beatmap
+        const mapTitle = "The Quick Brown Fox - The Big Black";
+        const mapDiff = "WHO'S AFRAID OF THE BIG BLACK";
+        const mapStars = 10.71;
+        const mapUrl = "https://osu.ppy.sh/beatmapsets/41823#osu/131891";
+        const mapImgUrl = "https://assets.ppy.sh/beatmaps/41823/covers/fullsize.jpg";
+        const mapLength = "1:14";
+        const mapBPM = 540.45;
+        const mapCS = 5.2;
+        const mapAR = 11;
+        const mapOD = 10.98;
+        const mapHP = 7;
+        const mapMapper = "Blue Dragon";
+        const mapRankedStatus = "Ranked";
+
+        // 2.2. Relacionadas ao score
+        const scoreTopPlayRanking = 1;
+        const scoreMods = "DTHDHRV2";
+        const scoreValue = "1,780,800";
+        const scoreAcc = 100;
+        const scoreDate = new Date('2025-12-18T01:00:00Z');
+        const scoreRelativeTime = time(scoreDate, TimestampStyles.RelativeTime);
+        const scorePp = 1923.19;
+        const scoreMaxPp = 1923.19;
+        const scoreCombo = 1337;
+        const scoreMaxCombo = 1337;
+        const scoreMisses = 0;
+
+        const showPersonalBest = scoreTopPlayRanking <= 200 ? `### __Personal Best #${scoreTopPlayRanking}__` : "";
 
         const embed = new EmbedBuilder()
         .setAuthor({ 
-            name: 'Loopyng: 4,863.27pp (#1)', 
+            name: `${user}: ${userPP}pp (#${userRank})`, 
             iconURL: 'https://iili.io/fcDwBEJ.png', // URL do Fubas.png
-            url: 'https://osu.ppy.sh/users/loopyng' // Link para o perfil do usuário
+            url: userUrl
         })
-        .setTitle('The Quick Brown Fox - The Big Black [WHO\'S AFRAID OF THE BIG BLACK] [10.71★]')
-        .setURL('https://osu.ppy.sh/beatmapsets/41823#osu/131891')
-        .setColor("#436990") // Azul Escuro
-        .setThumbnail('https://assets.ppy.sh/beatmaps/41823/covers/fullsize.jpg')
+        .setTitle(`${mapTitle} [${mapDiff}] [${mapStars}★]`)
+        .setURL(mapUrl)
+        .setColor("#4189D3") // Azul
+        .setThumbnail(mapImgUrl)
         .setDescription(`
-### __Personal Best #1__
-${emojiXH} **+DTHDHR${tab}1,780,800${tab}100%**${tab}${relativeTime}
-**1923.19**/1923.19PP • **1337x**/1337x • 0${miss}
-\`1:14\` • \`540.45\` BPM • \`CS: 5.2 AR: 11 OD: 10.98 HP: 7\`
+${showPersonalBest}
+${emojiXH} **+${scoreMods}${tab}${scoreValue}${tab}${scoreAcc}%**${tab}${scoreRelativeTime}
+**${scorePp}**/${scoreMaxPp}PP • **${scoreCombo}x**/${scoreMaxCombo}x • ${scoreMisses}${miss}
+\`${mapLength}\` • \`${mapBPM}\` BPM • \`CS: ${mapCS} AR: ${mapAR} OD: ${mapOD} HP: ${mapHP}\`
         `)
         .setFooter({ 
-            text: 'Mapset by Blue Dragon • Ranked',
+            text: `Mapset by ${mapMapper} • ${mapRankedStatus}`,
         });
         
         interaction.reply({
