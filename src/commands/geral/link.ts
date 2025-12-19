@@ -12,6 +12,13 @@ export default {
 
     async execute(interaction: ChatInputCommandInteraction) {
         
+        // --- Simulação de perfil do usuário a ser linkado ---
+        const username = "Loopyng";
+        const userUrl = "https://osu.ppy.sh/users/loopyng";
+        const userPP = "4,863.27";
+        const userRank = 1;
+        // ---------------------
+
         const user = interaction.user; // Pega o usuário que executou o comando
         const member = await interaction.guild?.members.fetch(user.id).catch(() => null); // Pega o membro do servidor, ou null se não conseguir
         // Define os dados escolhendo a melhor opção
@@ -21,11 +28,11 @@ export default {
 
         const embed = new EmbedBuilder()
         .setAuthor({ 
-            name: 'Loopyng: 4,863.27pp (#1)', 
+            name: `${username}: ${userPP}pp (#${userRank})`, 
             iconURL: displayAvatar, // URL da foto do usuário
         })
         .setColor("#436990") // Azul Escuro
-        .setThumbnail('https://osu.ppy.sh/users/loopyng')
+        .setThumbnail(userUrl)
         .setDescription(`
 **${displayName}**, seu username linkado foi editado para: \`${nickToLink}\` :white_check_mark:
         `)
