@@ -31,7 +31,7 @@ export default {
             name: `${username}: ${userPP}pp (#${userRank})`, 
             iconURL: displayAvatar, // URL da foto do usuário
         })
-        .setColor("#436990") // Azul Escuro
+        .setColor("#4189D3") // Azul
         .setThumbnail(userUrl)
         .setDescription(`
 **${displayName}**, seu username linkado foi editado para: \`${nickToLink}\` :white_check_mark:

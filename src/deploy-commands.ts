@@ -6,7 +6,7 @@ import path from 'path'
 dotenv.config()
 
 const commands = []
-// Caminho para a pasta commands (ajuste se necessario)
+// Caminho para a pasta commands
 const foldersPath = path.join(__dirname, 'commands')
 const commandFolders = fs.readdirSync(foldersPath)
 
