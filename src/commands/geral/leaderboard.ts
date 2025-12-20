@@ -1,4 +1,5 @@
 import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from "discord.js"
+import embedPagination from "./auxiliarfunctions/embedPagination";
 
 export default {
     data: new SlashCommandBuilder()
@@ -16,9 +17,16 @@ export default {
         const emojiB = "<:rankingBsmall2x:1451026536512753727>";
         const emojiC = "<:rankingCsmall2x:1451026570037956698>";
         const emojiD = "<:rankingDsmall2x:1451026596986355803>";
+
         const miss = "<:miss:1451028123553497281>";
 
-        // Simulação dos scores
+        // --- Simulação do mapa e scores ---
+        const mapTitle = "The Quick Brown Fox - The Big Black";
+        const mapDiff = "WHO'S AFRAID OF THE BIG BLACK";
+        const mapStars = 6.86;
+        const mapUrl = "https://osu.ppy.sh/b/131891";
+        const mapImgUrl = "https://assets.ppy.sh/beatmaps/41823/covers/fullsize.jpg";
+
         const scores = [
             { 
                 number: 1, 
@@ -27,7 +35,7 @@ export default {
                 score: "1,780,800",
                 combo: 1337,
                 maxCombo: 1337,
-                mods: "DTHDHRSV2", 
+                mods: "DTHDHRV2", 
                 pp: 1923.19, 
                 maxPp: 1923.19, 
                 acc: 100,
@@ -157,6 +165,21 @@ export default {
             },
             { 
                 number: 10, 
+                user: "-iccy", 
+                userUrl: "https://osu.ppy.sh/users/-iccy",
+                score: "200,000",
+                combo: 102,
+                maxCombo: 1337,
+                mods: "V2", 
+                pp: 48.92, 
+                maxPp: 358.84, 
+                acc: 81.25, 
+                miss: 48,
+                timeAgo: "<t:1766019600:R>", 
+                rank: `${emojiC}`,
+            },
+            { 
+                number: 11, 
                 user: "Paidasputas", 
                 userUrl: "https://osu.ppy.sh/users/paidasputas",
                 score: "0",
@@ -171,33 +194,42 @@ export default {
                 rank: `${emojiD}`,
             },
         ];
+        // ---------------------
 
-        // Lógica de formatação dos scores
-        const scoresDescription = scores.map(score => {
-            const showMiss = score.miss > 0 ? `${score.miss}${miss}` : '';
-            // Linha 1: #Número Usuário: Score [Combo] Mods
-            const line1 = `**#${score.number}** **[${score.user}](${score.userUrl})** ${score.score} [**${score.combo}x**/${score.maxCombo}x] **+${score.mods} **`;
-            // Linha 2: Rank PP/maxPP • Acc • Miss Tempo 
-            const line2 = `${score.rank} **${score.pp}pp**/${score.maxPp}PP • ${score.acc}% • ${showMiss}${score.timeAgo}`;
-            // Junta as duas linhas
-            return `${line1}\n${line2}`;
-        }).join('\n'); // Junta todos os scores
+        const scoresPerPage = 10;
+        const embeds: EmbedBuilder[] = [];
 
-        const embed = new EmbedBuilder()
-        .setAuthor({ 
-            name: 'The Quick Brown Fox - The Big Black [WHO\'S AFRAID OF THE BIG BLACK] [6.86★]', 
-            iconURL: 'https://iili.io/fcDwBEJ.png', // URL do Fubas.png
-            url: 'https://osu.ppy.sh/b/131891' // URL do mapa
-        })
-        .setColor("#436990") // Azul Escuro
-        .setThumbnail('https://assets.ppy.sh/beatmaps/41823/covers/fullsize.jpg') // URL da foto do mapa
-        .setDescription(scoresDescription)
-        .setFooter({ 
-            text: 'Page 1/10 • Mode: osu!',
-        });
+        for (let i = 0; i < scores.length; i += scoresPerPage) {
+
+            const currentScoresChunk = scores.slice(i, i + scoresPerPage);
+
+            // Lógica de formatação dos scores
+            const description = currentScoresChunk.map(score => {
+                const showMiss = score.miss > 0 ? `${score.miss}${miss}` : '';
+                // Linha 1: #Número Usuário: Score [Combo] Mods
+                const line1 = `**#${score.number}** **[${score.user}](${score.userUrl})** ${score.score} [**${score.combo}x**/${score.maxCombo}x] **+${score.mods} **`;
+                // Linha 2: Rank PP/maxPP • Acc • Miss Tempo 
+                const line2 = `${score.rank} **${score.pp}pp**/${score.maxPp}PP • ${score.acc}% • ${showMiss}${score.timeAgo}`;
+                // Junta as duas linhas
+                return `${line1}\n${line2}`;
+            }).join('\n'); // Junta todos os scores
+            
+            const embed = new EmbedBuilder()
+            .setAuthor({ 
+                name: `${mapTitle} [${mapDiff}] [${mapStars}★]`, 
+                iconURL: 'https://iili.io/fcDwBEJ.png', // URL do Fubas.png
+                url: mapUrl
+            })
+            .setColor("#4189D3") // Azul
+            .setThumbnail(mapImgUrl)
+            .setDescription(description)
+            .setFooter({ 
+                text: `Page ${Math.floor(i / scoresPerPage) + 1}/${Math.ceil(scores.length / scoresPerPage)} • Mode: osu!`,
+            });
+            
+            embeds.push(embed); // Adiciona à lista de embeds
+        }
         
-        interaction.reply({
-            embeds: [embed]
-        })
+        await embedPagination(interaction, embeds, "", false, 60000);
     }
 } 

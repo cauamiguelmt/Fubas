@@ -1,4 +1,5 @@
 import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from "discord.js"
+import embedPagination from "./auxiliarfunctions/embedPagination";
 
 export default {
     data: new SlashCommandBuilder()
@@ -16,9 +17,16 @@ export default {
         const emojiB = "<:rankingBsmall2x:1451026536512753727>";
         const emojiC = "<:rankingCsmall2x:1451026570037956698>";
         const emojiD = "<:rankingDsmall2x:1451026596986355803>";
+
         const miss = "<:miss:1451028123553497281>";
 
-        // Simulação dos scores
+        // --- Simulação do usuário e scores ---
+        const username = "Loopyng";
+        const userPP = "4,863.27";
+        const userRank = 1;
+        const userUrl = "https://osu.ppy.sh/users/loopyng";
+        const userAvatarUrl = "https://iili.io/fcihcyG.jpg";
+
         const scores = [
             { 
                 number: 1, 
@@ -33,7 +41,7 @@ export default {
                 mods: "+DTHDHR", 
                 timeAgo: "<t:1766019600:R>", 
                 rank: `${emojiXH}`,
-                mapUrl: "https://osu.ppy.sh/b/12345"
+                mapUrl: "https://osu.ppy.sh/b/131891"
             },
             { 
                 number: 2, 
@@ -48,7 +56,7 @@ export default {
                 mods: "", 
                 timeAgo: "<t:1766019600:R>", 
                 rank: `${emojiS}`,
-                mapUrl: "https://osu.ppy.sh/b/12345"
+                mapUrl: "https://osu.ppy.sh/b/734339"
             },
             { 
                 number: 3, 
@@ -170,34 +178,58 @@ export default {
                 rank: `${emojiS}`,
                 mapUrl: "https://osu.ppy.sh/b/67890"
             },
+            { 
+                number: 11, 
+                title: "BLACK or WHITE?", 
+                diff: "MASTER", 
+                stars: 6.05, 
+                pp: 228.78, 
+                acc: 95.32, 
+                combo: 1072, 
+                maxCombo: 1081,
+                miss: 0,
+                mods: "", 
+                timeAgo: "<t:1766019600:R>", 
+                rank: `${emojiS}`,
+                mapUrl: "https://osu.ppy.sh/b/635679"
+            },
         ];
+        // ---------------------
 
-        // Lógica de formatação dos scores
-        const scoresDescription = scores.map(score => {
-            const showMiss = score.miss > 0 ? `${score.miss}${miss}` : '';
-            // Linha 1: #Numero Título [Diff] [Stars★]
-            const line1 = `**#${score.number}** **[${score.title} [${score.diff}]](${score.mapUrl})** [${score.stars}★]`;
-            // Linha 2: Rank PP (Acc) [Combo] Miss Mods Tempo 
-            const line2 = `${score.rank} **${score.pp}pp** (${score.acc}%) [**${score.combo}x**/${score.maxCombo}x] ${showMiss} **${score.mods} ** ${score.timeAgo}`;
-            // Junta as duas linhas
-            return `${line1}\n${line2}`;
-        }).join('\n'); // Junta todos os scores
+        const scoresPerPage = 10;
+        const embeds: EmbedBuilder[] = [];
 
-        const embed = new EmbedBuilder()
-        .setAuthor({ 
-            name: 'Loopyng: 4,863.27pp (#1)', 
-            iconURL: 'https://iili.io/fcDwBEJ.png', // URL do Fubas.png
-            url: 'https://osu.ppy.sh/users/loopyng' // Link para o perfil do usuário
-        })
-        .setColor("#436990") // Azul Escuro
-        .setThumbnail('https://iili.io/fcihcyG.jpg') // URL da foto do usuário
-        .setDescription(scoresDescription)
-        .setFooter({ 
-            text: 'Page 1/20 • Mode: osu!',
-        });
+        for (let i = 0; i < scores.length; i += scoresPerPage) {
+
+            const currentScoresChunk = scores.slice(i, i + scoresPerPage);
+
+            // Lógica de formatação dos scores
+            const description = currentScoresChunk.map(score => {
+                const showMiss = score.miss > 0 ? `${score.miss}${miss}` : '';
+                // Linha 1: #Número Título [Diff] [Stars★]
+                const line1 = `**#${score.number}** **[${score.title} [${score.diff}]](${score.mapUrl})** [${score.stars}★]`;
+                // Linha 2: Rank PP (Acc) [Combo] Miss Mods Tempo 
+                const line2 = `${score.rank} **${score.pp}pp** (${score.acc}%) [**${score.combo}x**/${score.maxCombo}x] ${showMiss}**${score.mods} ** ${score.timeAgo}`;
+                // Junta as duas linhas
+                return `${line1}\n${line2}`;
+            }).join('\n'); // Junta todos os scores
+            
+            const embed = new EmbedBuilder()
+            .setAuthor({ 
+                name: `${username}: ${userPP}pp (#${userRank})`, 
+                iconURL: 'https://iili.io/fcDwBEJ.png', // URL do Fubas.png
+                url: userUrl
+            })
+            .setColor("#4189D3") // Azul
+            .setThumbnail(userAvatarUrl)
+            .setDescription(description)
+            .setFooter({ 
+                text: `Page ${Math.floor(i / scoresPerPage) + 1}/${Math.ceil(scores.length / scoresPerPage)} • Mode: osu!`,
+            });
+
+            embeds.push(embed); // Adiciona à lista de embeds
+        }
         
-        interaction.reply({
-            embeds: [embed]
-        })
+        await embedPagination(interaction, embeds, "", false, 60000);
     }
 }
