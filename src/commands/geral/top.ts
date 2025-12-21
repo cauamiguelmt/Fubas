@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from "discord.js"
-import embedPagination from "./auxiliarfunctions/embedPagination";
+import embedPagination from "../../utils/embedPagination";
 
 export default {
     data: new SlashCommandBuilder()
