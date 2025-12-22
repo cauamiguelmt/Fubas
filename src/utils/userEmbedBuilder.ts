@@ -1,8 +1,8 @@
-import { EmbedBuilder } from "discord.js";
-import { PlayerInterface } from "../interfaces/interfaces.export";
-import { URLS, EMOJIS, COLORS } from "../constants";
+import { EmbedBuilder } from "discord.js"
+import { IPlayer } from "../interfaces/interfaces.export"
+import { URLS, EMOJIS, COLORS } from "../constants"
 
-export default async function userEmbedBuilder(player: PlayerInterface): Promise<EmbedBuilder> {
+export default async function userEmbedBuilder(player: IPlayer): Promise<EmbedBuilder> {
 
     const options = {
         maximumFractionDigits: 2 
@@ -23,7 +23,7 @@ export default async function userEmbedBuilder(player: PlayerInterface): Promise
 • **Fubika Rank:** \`#${player.rank}\`
 • **PP:** \`${player.pp.toLocaleString('en-US', options)}\` • **Acc:** \`${player.acc.toLocaleString('en-US', options)}%\`
 • **Level:** \`${player.level}%\`
-• **Playcount:** \`${player.playcount}\` (\`${player.playtime} hrs\`)
+• **Playcount:** \`${player.playcount.toLocaleString('en-US')}\` (\`${player.playtime} hrs\`)
 •  ${EMOJIS.rankXH} \`${player.ranks.XH}\` ${EMOJIS.rankX} \`${player.ranks.X}\` ${EMOJIS.rankSH} \`${player.ranks.SH}\` ${EMOJIS.rankS} \`${player.ranks.S}\` ${EMOJIS.rankA} \`${player.ranks.A}\`
         `)
         .setFooter({ 
