@@ -1,4 +1,6 @@
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from "discord.js"
+import { SlashCommandBuilder, CommandInteraction, time, TimestampStyles } from "discord.js"
+import { IPlayer } from "../../interfaces/interfaces.export"
+import { userEmbedBuilder } from "../../utils/utils.export"
 
 export default {
     data: new SlashCommandBuilder()
@@ -8,58 +10,69 @@ export default {
     async execute(interaction: CommandInteraction) {
         
         // --- Simulação de perfil do usuário ---
-        const username = "Loopyng";
-        const userUrl = "https://osu.ppy.sh/users/loopyng";
-        const userAvatarUrl = "https://iili.io/fcihcyG.jpg";
-        const userRank = 1;
-        const userPP = "4,863.27";
-        const userAcc = 97.98;
-        const userLevel = "100 + 25.00";
-        const userPlaycount = "27,077";
-        const userPlaytime = 520;
-        const userRanks = {
-            XH: 2,
-            X: 5,
-            SH: 49,
-            S: 148,
-            A: 604
-        };
-        const userLastSeen: string = "3 days"; // "Tempo" ou "Online"
-        // ---------------------
+        const Loopyng: IPlayer = {
+            id: 1,
+            nickname: "Loopyng",
+            url: "https://osu.ppy.sh/users/loopyng",
+            avatarUrl: "https://iili.io/fcihcyG.jpg",
+            rank: 1,
+            pp: 4863.27,
+            acc: 97.98,
+            level: 100,
+            playcount: 27077,
+            playtime: 520,
+            ranks: {
+                XH: 2,
+                X: 5,
+                SH: 49,
+                S: 148,
+                A: 604
+            },
+            lastSeen: "3 days",
+            top200: [
+                {
+                    id: 1,
+                    score: 150343,
+                    starrating: 4.11399,
+                    pp: 14.776,
+                    maxPP: 118.04912,
+                    acc: 77.61276,
+                    maxCombo: 150,
+                    mods: "NFV2",
+                    n300: 208,
+                    n100: 77,
+                    n50: 9,
+                    nMiss: 9,
+                    date: new Date(2025, 12, 20),
+                    timestamp: time(new Date(2025, 12, 20), TimestampStyles.RelativeTime),
+                    grade: 'C',
+                    perfect: false,
+                    beatmap: {
+                        id: 1442773,
+                        collectionId: 682290,
+                        url: "https://osu.ppy.sh/beatmapsets/682290#osu/1442773",
+                        imgUrl: "https://assets.ppy.sh/beatmaps/682290/covers/cover.jpg?1645786406",
+                        title: "Miracle Sugite Yabai (feat. shully)",
+                        diff: "Insane",
+                        mode: "osu",
+                        starrating: 4.11399,
+                        maxCombo: 434,
+                        length: 88,
+                        bpm: 145,
+                        cs: 4,
+                        ar: 8.5,
+                        od: 8,
+                        hp: 6,
+                        mapper: "Milan-",
+                        status: "ranked"
+                    }
+                }
+            ]
+        }
+
+        const embed = await userEmbedBuilder(Loopyng)        
         
-        // Emojis de rank
-        const emojiXH = "<:rankingXHsmall2x:1451026695569281146>";
-        const emojiX = "<:rankingXsmall2x:1451026724513906698>"; 
-        const emojiSH = "<:rankingSHsmall2x:1451026620310753382>";
-        const emojiS = "<:rankingSsmall2x:1451026644579127476>"; 
-        const emojiA = "<:rankingAsmall2x:1451026496968986795>";
-        
-        const displayLastSeen = userLastSeen === "Online" ? "Online on osu! Fubika" : `Last Seen ${userLastSeen} Ago on osu`;
-        const displayLastSeenIcon = userLastSeen === "Online" ? // Green dot : Red dot
-                                                                'https://www.freepnglogos.com/uploads/dot-png/green-dot-clip-art-clkerm-vector-clip-art-online-10.png'
-                                                              : 'https://www.freepnglogos.com/uploads/dot-png/red-glossy-dot-clip-art-clkerm-vector-clip-art-18.png';
-        
-        const embed = new EmbedBuilder()
-        .setAuthor({ 
-            name: `osu! Standard Profile for ${username}`, 
-            iconURL: 'https://iili.io/fcDwBEJ.png', // URL do Fubas.png
-            url: userUrl
-        })
-        .setColor("#4189D3") // Azul
-        .setThumbnail(userAvatarUrl)
-        .setDescription(`
-• **Fubika Rank:** \`#${userRank}\`
-• **PP:** \`${userPP}\` • **Acc:** \`${userAcc}%\`
-• **Level:** \`${userLevel}%\`
-• **Playcount:** \`${userPlaycount}\` (\`${userPlaytime} hrs\`)
-• **Ranks:** ${emojiXH} \`${userRanks.XH}\` ${emojiX} \`${userRanks.X}\` ${emojiSH} \`${userRanks.SH}\` ${emojiS} \`${userRanks.S}\` ${emojiA} \`${userRanks.A}\`
-        `)
-        .setFooter({ 
-            text: displayLastSeen, 
-            iconURL: displayLastSeenIcon
-        });
-        
-        interaction.reply({
+        await interaction.reply({
             embeds: [embed]
         })
     }
