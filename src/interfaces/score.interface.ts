@@ -3,17 +3,16 @@ import { IBeatmap, IPlayer } from "./interfaces.export";
 export default interface IScore {
     id: number
     score: number
-    starrating: number // Depende da combinação de mods
+    // starrating: number // Depende da combinação de mods
     pp: number
-    maxPP: number
+    // maxPP: number
     acc: number
-    maxCombo: number
+    max_combo: number
     mods: string // NFV2, HDHR, etc
     n300: number
     n100: number
     n50: number
-    nMiss: number
-    date: Date
+    nmiss: number
     timestamp: string
     grade: string // SS, S, A, etc
     perfect: boolean

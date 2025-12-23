@@ -23,23 +23,23 @@ export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promi
             // Lógica de formatação dos scores
             const description = currentScoresChunk.map((score, index) => {
                 const position = index + 1; // Posição do score
-                const showMiss = score.nMiss > 0 ? `${score.nMiss}${EMOJIS.miss}` : ''
+                const showMiss = score.nmiss > 0 ? `${score.nmiss}${EMOJIS.miss}` : ''
                 // Linha 1: #Número Usuário: Score [Combo] Mods
-                const line1 = `**#${position}** **[${score.player.nickname}](${score.player.url})** ${score.score} [**${score.maxCombo}x**/${beatmap.maxCombo}x] **+${score.mods} **`
+                const line1 = `**#${position}** **[${score.player.name}](${score.player.url})** ${score.score} [**${score.max_combo}x**/${beatmap.max_combo}x] **+${score.mods} **`
                 // Linha 2: Rank PP/maxPP • Acc • Miss Tempo 
-                const line2 = `${scoreGradeToEmoji(score.grade)} **${score.pp.toLocaleString('en-US', options)}pp**/${score.maxPP.toLocaleString('en-US', options)}PP • ${score.acc.toLocaleString('en-US', options)}% • ${showMiss}${score.timestamp}`
+                const line2 = `${scoreGradeToEmoji(score.grade)} **${score.pp.toLocaleString('en-US', options)}pp** • ${score.acc.toLocaleString('en-US', options)}% • ${showMiss}${score.timestamp}`
                 // Junta as duas linhas
                 return `${line1}\n${line2}`
             }).join('\n'); // Junta todos os scores
             
             const embed = new EmbedBuilder()
             .setAuthor({ 
-                name: `${beatmap.title} [${beatmap.diff}] [${beatmap.starrating}★]`,
+                name: `${beatmap.title} [${beatmap.diff}] [${beatmap.star_rating}★]`,
                 iconURL: URLS.fubikaIcon,
                 url: beatmap.url
             })
-            .setColor(COLORS.black)
-            .setThumbnail(beatmap.imgUrl)
+            .setColor(COLORS.blue)
+            .setThumbnail(beatmap.cover)
             .setDescription(description)
             .setFooter({ 
                 text: `Page ${Math.floor(i / scoresPerPage) + 1}/${Math.ceil(beatmap.scores.length / scoresPerPage)} • Mode: osu!`,

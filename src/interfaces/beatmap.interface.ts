@@ -1,22 +1,22 @@
 import { IScore } from "./interfaces.export"
 
 export default interface IBeatmap {
-    id: number
-    collectionId: number
+    beatmap_id: number
+    beatmapset_id: number
     url: string
-    imgUrl: string
+    cover: string
     title: string
     diff: string
     mode: string
-    starrating: number
-    maxCombo: number
-    length: number // em segundos
+    star_rating: number
+    max_combo: number
+    total_length: number // em segundos
     bpm: number
     cs: number
     ar: number
     od: number
     hp: number
-    mapper: string
+    author_name: string
     status: string // Ranked, Loved, etc
     scores?: Omit<IScore, 'beatmap'>[]
 }
