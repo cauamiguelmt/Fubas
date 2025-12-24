@@ -128,8 +128,8 @@ export default async function embedPagination(interaction: CommandInteraction | 
     
             const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(first, prev, pageCount, next, last)
     
-            const msg = await interaction.reply({ content: string, embeds: [pages[index]!.data], components: [buttons] })
-    
+            const msg = await interaction.edit({ content: string, embeds: [pages[index]!.data], components: [buttons] });
+            
             const collector = msg.createMessageComponentCollector({
                 componentType: ComponentType.Button,
                 time

@@ -1,11 +1,11 @@
 import { getPlayer } from "../../services/apiCalls"
-import { SlashCommandBuilder, CommandInteraction, time, TimestampStyles } from "discord.js"
+import { SlashCommandBuilder, CommandInteraction } from "discord.js"
 import { userEmbedBuilder } from "../../utils/utils.export"
 
 export default {
     data: new SlashCommandBuilder()
         .setName('user')
-        .setDescription('Mostra um perfil de osu! no Fubika'),
+        .setDescription('Mostra seu perfil de osu! no Fubika'),
 
     async execute(interaction: CommandInteraction) {
         

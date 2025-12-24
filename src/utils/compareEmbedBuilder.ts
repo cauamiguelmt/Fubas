@@ -1,42 +1,60 @@
 import { EmbedBuilder, time, TimestampStyles } from "discord.js"
-import { IScore } from "../interfaces/interfaces.export"
+import { IBeatmap, IPlayer } from "../interfaces/interfaces.export"
 import { URLS, EMOJIS, COLORS } from "../constants"
 import { scoreGradeToEmoji, applyModsToStats, formatTime } from "./utils.export"
 
-export default async function recentEmbedBuilder(score: IScore): Promise<EmbedBuilder> {
+export default async function compareEmbedBuilder(beatmap: IBeatmap, player: IPlayer): Promise<EmbedBuilder> {
+
+    if (!beatmap.scores)
+        throw new Error("Beatmap scores data is missing")
+
+    const score = beatmap.scores.find(score => {
+                
+        if (!score.player)
+            throw new Error("Player data are missing")
+        
+        return score.player.id === player.id
+    })
+
+    if (!score)
+        throw new Error("No matching score found") // <--- Trocar por um embed de não há scores do jogador no mapa
+    if (!score.player)
+        throw new Error("Player data are missing")
+        
 
     const tab = "\u2003"
     const options = {
         maximumFractionDigits: 2
     }
 
-    let bpm = score.beatmap.bpm
-        let length = score.beatmap.total_length
-        applyModsToStats(bpm, length, score.mods)
-        // DEFINIR DEPOIS COMO VÃO SER CALCULADOS CS, AR, OD, HP DO SCORE
-        let cs, ar, od, hp // <---
-        // + OTHERS SCORES ON THE BEATMAP POSTERIORMENTE
+    let bpm: number = beatmap.bpm
+    let length: number = beatmap.total_length
+    applyModsToStats(bpm, length, score.mods)
+    // DEFINIR DEPOIS COMO VÃO SER CALCULADOS CS, AR, OD, HP DO SCORE
+    let cs = 4.2, ar = 9.2, od = 9.2, hp = 5.2 // <---
+    // + OTHERS SCORES ON THE BEATMAP POSTERIORMENTE
 
-    const scoreTopPlayRanking = score.player.top100.findIndex(s => s.id === score.id) + 1
-    const showPersonalBest = scoreTopPlayRanking <= 200 ? `### __Personal Best #${scoreTopPlayRanking}__` : " "
+    const scoreTopPlayRanking = (player.top_200?.findIndex(s => s.id === score.id) ?? -1) + 1
+    const displayPersonalBest = scoreTopPlayRanking <= 200 && scoreTopPlayRanking > 0 ? `### __Personal Best #${scoreTopPlayRanking}__` : " "
+    const displayMods = score.mods === '' ? '' : `+${score.mods}`
 
     return new EmbedBuilder()
         .setAuthor({ 
             name: `${score.player.name}: ${score.player.pp}pp (#${score.player.rank})`, 
             iconURL: URLS.fubikaIcon,
             url: score.player.url
-        })
-        .setTitle(`${score.beatmap.title} [${score.beatmap.diff}] [${score.beatmap.star_rating.toLocaleString('en-US', options)}★]`)
-        .setURL(score.beatmap.url)
+        }) //                                       Mudar --->  score.star_rating.toLocaleString('en-US', options)}
+        .setTitle(`${beatmap.title} [${beatmap.diff}] [${beatmap.star_rating.toLocaleString('en-US', options)}★]`)
+        .setURL(beatmap.url)
         .setColor(COLORS.blue)
-        .setThumbnail(score.beatmap.cover)
+        .setThumbnail(beatmap.cover)
         .setDescription(`
-${showPersonalBest}
-${scoreGradeToEmoji(score.grade)} **+${score.mods}${tab}${score.score.toLocaleString('en-US')}${tab}${score.acc.toLocaleString('en-US', options)}%**${tab}${time(new Date(score.timestamp), TimestampStyles.RelativeTime)}
-**${score.pp.toLocaleString('en-US', options)}PP** • **${score.max_combo}x**/${score.beatmap.max_combo}x • ${score.nmiss}${EMOJIS.miss}
+${displayPersonalBest}
+${scoreGradeToEmoji(score.grade)} **${displayMods}${tab}${score.score.toLocaleString('en-US')}${tab}${score.acc.toLocaleString('en-US', options)}%**${tab}${time(new Date(score.play_time), TimestampStyles.RelativeTime)}
+**${score.pp.toLocaleString('en-US', options)}PP** • **${score.max_combo}x**/${beatmap.max_combo}x • ${score.nmiss}${EMOJIS.miss}
 \`${formatTime(length)}\` • \`${bpm}\` BPM • \`CS: ${cs} AR: ${ar} OD: ${od} HP: ${hp}\`
         `) // Mudar o campo do PP para **${score.pp.toLocaleString('en-US', options)}**/${score.maxPP.toLocaleString('en-US', options)}PP quando tiver maxPP no objeto score
         .setFooter({ 
-            text: `Mapset by ${score.beatmap.author_name} • ${score.beatmap.status}`,
+            text: `Mapset by ${beatmap.author_name} • ${beatmap.status}`,
         });
 }

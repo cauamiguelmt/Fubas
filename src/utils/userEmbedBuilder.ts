@@ -8,12 +8,9 @@ export default async function userEmbedBuilder(player: IPlayer): Promise<EmbedBu
         maximumFractionDigits: 2 
     };
 
-    const playerPlaycount = 27077
-    const playerLevel = 100
-    let playerLastSeen = "3 days"
-
-    const displayLastSeen = playerLastSeen === "Online" ? "Online on osu! Fubika" : `Last Seen ${playerLastSeen} Ago on osu`
-    const displayLastSeenIcon = playerLastSeen === "Online" ? URLS.greenDot  : URLS.redDot
+    const displayLastActivity = player.last_activity === "Online" ? "Online on osu! Fubika" : `Última vez visto ${player.last_activity} no Fubika`
+    const displayLastActivityIcon = player.last_activity === "Online" ? URLS.greenDot  : URLS.redDot
+    const displayPlaytime = player.playtime < 3600 ? `${Math.round(player.playtime / 60)} mins` : `${Math.round(player.playtime / 3600)} hrs`
 
     return new EmbedBuilder()
         .setAuthor({ 
@@ -26,12 +23,12 @@ export default async function userEmbedBuilder(player: IPlayer): Promise<EmbedBu
         .setDescription(`
 • **Fubika Rank:** \`#${player.rank}\`
 • **PP:** \`${player.pp.toLocaleString('en-US', options)}\` • **Acc:** \`${player.acc.toLocaleString('en-US', options)}%\`
-• **Level:** \`${playerLevel}%\`
-• **Playcount:** \`${playerPlaycount.toLocaleString('en-US')}\` (\`${player.playtime} hrs\`)
+• **Level:** \`${player.level.toLocaleString('en-US', options)}%\`
+• **Playcount:** \`${player.playcount.toLocaleString('en-US')}\` (\`${displayPlaytime}\`)
 •  ${EMOJIS.rankXH} \`${player.ssh_count}\` ${EMOJIS.rankX} \`${player.ss_count}\` ${EMOJIS.rankSH} \`${player.sh_count}\` ${EMOJIS.rankS} \`${player.s_count}\` ${EMOJIS.rankA} \`${player.a_count}\`
         `)
         .setFooter({ 
-            text: displayLastSeen, 
-            iconURL: displayLastSeenIcon
+            text: displayLastActivity, 
+            iconURL: displayLastActivityIcon
         });
 }

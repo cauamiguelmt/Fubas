@@ -13,9 +13,9 @@ export default interface IScore {
     n100: number
     n50: number
     nmiss: number
-    timestamp: string
+    play_time: string
     grade: string // SS, S, A, etc
     perfect: boolean
-    beatmap: IBeatmap // <--- Substituir por beatmap?: IBeatmap e corrigir o código
-    player: IPlayer // <--- Substituir por player?: IPlayer e corrigir o código
+    beatmap?: IBeatmap
+    player?: IPlayer
 }
