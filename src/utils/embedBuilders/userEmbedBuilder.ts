@@ -11,7 +11,13 @@ export default async function userEmbedBuilder(player: IPlayer): Promise<{ embed
     const avatarAttachment = new AttachmentBuilder(player.pfp, { name: 'profile.png' })
     const displayLastActivity = player.last_activity === "Online" ? "Online no Fubika" : `Última vez online ${player.last_activity} no Fubika`
     const displayLastActivityIcon = player.last_activity === "Online" ? URLS.greenDot  : URLS.redDot
-    const displayPlaytime = player.playtime < 3600 ? `${Math.round(player.playtime / 60)} mins` : `${Math.round(player.playtime / 3600)} hrs`
+    let displayPlaytime
+    if (player.playtime < 3600)
+        displayPlaytime = `${Math.round(player.playtime / 60)} mins`
+    else if (Math.round(player.playtime / 3600) === 1)
+        displayPlaytime = '1 hr'
+    else 
+        displayPlaytime = `${Math.round(player.playtime / 3600).toLocaleString('en-US')} hrs`
 
     const embed = new EmbedBuilder()
         .setAuthor({ 

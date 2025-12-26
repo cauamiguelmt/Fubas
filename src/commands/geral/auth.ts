@@ -22,7 +22,7 @@ export default {
             const mensagemComplemento = sucess ? '!' : ''
 
             const embed = await defaultEmbedBuilder(message + mensagemComplemento)
-            
+
             await interaction.reply({
                 ephemeral: true,
                 embeds: [embed]

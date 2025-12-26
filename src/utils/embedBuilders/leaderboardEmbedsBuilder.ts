@@ -28,6 +28,7 @@ export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promi
         .setDescription('Ainda não há scores nesse beatmap!')
         .setFooter({ 
             text: 'Mode: osu!',
+            iconURL: URLS.std
         });
 
         embeds.push(embed)
@@ -42,7 +43,7 @@ export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promi
         const description = currentScoresChunk.map((score, index) => {
 
             if (!score.player) {
-                throw new Error("Some player data is missing")
+                throw new Error("Some player data are missing")
             }
 
             const position = i + index + 1; // Posição do score
@@ -67,6 +68,7 @@ export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promi
         .setDescription(description)
         .setFooter({ 
             text: `Page ${Math.floor(i / scoresPerPage) + 1}/${Math.ceil(beatmap.scores.length / scoresPerPage)} • Mode: osu!`,
+            iconURL: URLS.std
         });
         
         embeds.push(embed); // Adiciona à lista de embeds

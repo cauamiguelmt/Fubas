@@ -8,7 +8,7 @@ function getModeName(mode: number): string {
         case 1: return "Taiko"
         case 2: return "Catch"
         case 3: return "Mania"
-        default: return "osu!"
+        default: return "Osu!"
     }
 }
 
@@ -30,7 +30,11 @@ export default async function leaderboardEmbedsBuilder(players: Array<IPlayer>, 
     // Se não tiver jogadores
     if (!players || players.length === 0) {
         const embed = new EmbedBuilder()
-            .setTitle(`Ranking de ${getModeName(mode)}`)
+            .setAuthor({
+                name: `Performance Ranking for ${getModeName(mode)}`,
+                iconURL: URLS.fubikaIcon,
+                // url: 
+            })
             .setColor(COLORS.blue)
             .setDescription("Nenhum jogador encontrado neste ranking.");
         embeds.push(embed)
@@ -71,7 +75,11 @@ export default async function leaderboardEmbedsBuilder(players: Array<IPlayer>, 
         })
 
         const embed = new EmbedBuilder()
-            .setTitle(`Performance Ranking for ${getModeName(mode)}`)
+            .setAuthor({
+                name: `Performance Ranking for ${getModeName(mode)}`,
+                iconURL: URLS.fubikaIcon,
+                // url: 
+            })
             .setColor(COLORS.blue)
             .setDescription(lines.join('\n'))
             .setFooter({
