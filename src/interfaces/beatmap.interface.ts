@@ -4,7 +4,7 @@ export default interface IBeatmap {
     beatmap_id: number
     beatmapset_id: number
     url: string
-    cover: string
+    thumbnail: string
     title: string
     diff: string
     mode: string

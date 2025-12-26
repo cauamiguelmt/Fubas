@@ -17,7 +17,7 @@ export default async function recentEmbedBuilder(player: IPlayer, score: IScore)
     // DEFINIR DEPOIS COMO VÃO SER CALCULADOS CS, AR, OD, HP DO SCORE
     const scoreTopPlayRanking = (player.top_200?.findIndex(s => s.id === score.id) ?? -1) + 1
     const displayIfRanked = beatmap.status !== 'ranked' ? ' (if ranked)' : ''
-    const displayPersonalBest = scoreTopPlayRanking <= 200 && score.grade !== 'F' ? `### __Personal Best #${scoreTopPlayRanking}${displayIfRanked}__` : ''
+    const displayPersonalBest = scoreTopPlayRanking <= 100 && score.grade !== 'F' ? `### __Personal Best #${scoreTopPlayRanking}${displayIfRanked}__` : ''
     const displayMods = score.mods === '' ? '' : `+${score.mods}`
     const displayPP = score.grade === 'F'
         ? `~~${score.pp.toLocaleString('en-US', options)}PP~~` // Crossed
@@ -32,7 +32,7 @@ export default async function recentEmbedBuilder(player: IPlayer, score: IScore)
         .setTitle(`${beatmap.title} [${beatmap.diff}] [${beatmap.star_rating.toLocaleString('en-US', options)}★]`)
         .setURL(beatmap.url)
         .setColor(COLORS.blue)
-        .setThumbnail(beatmap.cover)
+        .setThumbnail(beatmap.thumbnail)
         .setDescription(`
 ${displayPersonalBest}
 ${scoreGradeToEmoji(score.grade)} **${displayMods}${tab}${score.score.toLocaleString('en-US')}${tab}${score.acc.toLocaleString('en-US', options)}%**${tab}${time(new Date(score.play_time), TimestampStyles.RelativeTime)}

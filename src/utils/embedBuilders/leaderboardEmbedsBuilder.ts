@@ -24,7 +24,7 @@ export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promi
             url: beatmap.url
         })
         .setColor(COLORS.blue)
-        .setThumbnail(beatmap.cover)
+        .setThumbnail(beatmap.thumbnail)
         .setDescription('Ainda não há scores nesse beatmap!')
         .setFooter({ 
             text: 'Mode: osu!',
@@ -64,7 +64,7 @@ export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promi
             url: beatmap.url
         })
         .setColor(COLORS.blue)
-        .setThumbnail(beatmap.cover)
+        .setThumbnail(beatmap.thumbnail)
         .setDescription(description)
         .setFooter({ 
             text: `Page ${Math.floor(i / scoresPerPage) + 1}/${Math.ceil(beatmap.scores.length / scoresPerPage)} • Mode: osu!`,

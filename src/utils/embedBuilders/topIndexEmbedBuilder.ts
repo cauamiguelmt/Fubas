@@ -28,7 +28,7 @@ export default async function topIndexEmbedBuilder(player: IPlayer, score: IScor
         .setTitle(`${beatmap.title} [${beatmap.diff}] [${beatmap.star_rating.toLocaleString('en-US', options)}★]`)
         .setURL(beatmap.url)
         .setColor(COLORS.blue)
-        .setThumbnail(beatmap.cover)
+        .setThumbnail(beatmap.thumbnail)
         .setDescription(`
 ### __Personal Best #${index}__
 ${scoreGradeToEmoji(score.grade)} **${displayMods}${tab}${score.score.toLocaleString('en-US')}${tab}${score.acc.toLocaleString('en-US', options)}%**${tab}${time(new Date(score.play_time), TimestampStyles.RelativeTime)}
