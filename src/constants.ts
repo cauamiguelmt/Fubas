@@ -1,5 +1,9 @@
 export const URLS = {
     fubikaIcon: 'https://i.imgur.com/F7FEYaG.png',
+    std: 'https://i.imgur.com/jhR2Swe.png',
+    taiko: 'https://i.imgur.com/D0asi8p.png',
+    ctb: 'https://i.imgur.com/FOA0rJP.png',
+    mania: 'https://i.imgur.com/cg2Nt2M.png',
     greenDot: 'https://www.freepnglogos.com/uploads/dot-png/green-dot-clip-art-clkerm-vector-clip-art-online-10.png',
     redDot: 'https://www.freepnglogos.com/uploads/dot-png/red-glossy-dot-clip-art-clkerm-vector-clip-art-18.png'
 } as const;

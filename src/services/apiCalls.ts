@@ -40,7 +40,7 @@ export async function getRecent(id: string): Promise<Array<IScore>>{
 export async function getBeatmap(id: string): Promise<IBeatmap>{
     
     try{
-        const response = await osuApiClient.get(`beatmap/${id}`) // <--- Alterar
+        const response = await osuApiClient.get(`beatmap/${id}`)
 
         if(response.status != 200){
             throw new Error(response.data.error)
@@ -52,6 +52,24 @@ export async function getBeatmap(id: string): Promise<IBeatmap>{
 
         console.error("Erro no beatmap: ", error)
         throw new Error("Erro no beatmap: " + String(error))
+    }
+}
+
+export async function getGlobalRanking(mode: number): Promise<Array<IPlayer>>{
+    
+    try{
+        const response = await osuApiClient.get(`ranking/global?mode=${mode}`)
+
+        if(response.status != 200){
+            throw new Error(response.data.error)
+        }
+
+        return response.data
+
+    }catch(error){
+
+        console.error("Erro no ranking: ", error)
+        throw new Error("Erro no ranking: " + String(error))
     }
 }
 

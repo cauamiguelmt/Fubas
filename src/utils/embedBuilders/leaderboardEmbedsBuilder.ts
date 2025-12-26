@@ -3,7 +3,7 @@ import { IBeatmap } from "../../interfaces/interfaces.export"
 import { URLS, EMOJIS, COLORS } from "../../constants"
 import { scoreGradeToEmoji } from "../utils.export"
 
-export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promise<Array<EmbedBuilder>>{
+export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promise<Array<EmbedBuilder>> {
     
     const options = {
         maximumFractionDigits: 2
@@ -15,7 +15,7 @@ export default async function leaderboardEmbedsBuilder(beatmap: IBeatmap): Promi
     if (!beatmap.scores) { // Caso não haja o array de scores
         throw new Error("Scores data are missing")
 
-    }else if (beatmap.scores.length == 0) { // Caso o array de scores seja vazio
+    }else if (beatmap.scores.length === 0) { // Caso o array de scores seja vazio
 
         const embed = new EmbedBuilder()
         .setAuthor({ 

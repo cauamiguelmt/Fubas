@@ -23,7 +23,7 @@ export default async function userEmbedBuilder(player: IPlayer): Promise<{ embed
         .setThumbnail('attachment://profile.png')
         .setDescription(`
 • **Fubika Rank:** \`#${player.rank}\`
-• **PP:** \`${player.pp.toLocaleString('en-US', options)}\` • **Acc:** \`${player.acc.toLocaleString('en-US', options)}%\`
+• **PP:** \`${player.pp.toLocaleString('en-US')}\` • **Acc:** \`${player.acc.toLocaleString('en-US', options)}%\`
 • **Level:** \`${player.level.toLocaleString('en-US', options)}%\`
 • **Playcount:** \`${player.playcount.toLocaleString('en-US')}\` (\`${displayPlaytime}\`)
 •  ${EMOJIS.rankXH} \`${player.ssh_count}\` ${EMOJIS.rankX} \`${player.ss_count}\` ${EMOJIS.rankSH} \`${player.sh_count}\` ${EMOJIS.rankS} \`${player.s_count}\` ${EMOJIS.rankA} \`${player.a_count}\`

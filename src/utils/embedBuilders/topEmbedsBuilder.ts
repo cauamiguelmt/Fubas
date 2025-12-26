@@ -3,7 +3,7 @@ import { IPlayer } from "../../interfaces/interfaces.export"
 import { URLS, EMOJIS, COLORS } from "../../constants"
 import { scoreGradeToEmoji } from "../utils.export"
 
-export default async function topEmbedsBuilder(player: IPlayer): Promise<Array<EmbedBuilder>>{
+export default async function topEmbedsBuilder(player: IPlayer): Promise<Array<EmbedBuilder>> {
     
     const options = {
         maximumFractionDigits: 2
@@ -19,7 +19,7 @@ export default async function topEmbedsBuilder(player: IPlayer): Promise<Array<E
 
         const embed = new EmbedBuilder()
         .setAuthor({ 
-            name: `${player.name}: ${player.pp}pp (#${player.rank})`, 
+            name: `${player.name}: ${player.pp.toLocaleString('en-US')}pp (#${player.rank})`, 
             iconURL: URLS.fubikaIcon,
             url: player.url
         })

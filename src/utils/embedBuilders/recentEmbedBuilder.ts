@@ -22,7 +22,7 @@ export default async function recentEmbedBuilder(player: IPlayer, score: IScore)
 
     return new EmbedBuilder()
         .setAuthor({ 
-            name: `${player.name}: ${player.pp.toLocaleString('en-US', options)}pp (#${player.rank})`, 
+            name: `${player.name}: ${player.pp.toLocaleString('en-US')}pp (#${player.rank})`, 
             iconURL: URLS.fubikaIcon,
             url: player.url
         }) //                                           Mudar --->  beatmap.star_rating.toLocaleString('en-US', options)}

@@ -19,7 +19,7 @@ export async function noRecentScoresEmbedBuilder(player: IPlayer): Promise<{ emb
 
     const embed = new EmbedBuilder()
         .setAuthor({ 
-            name: `${player.name}: ${player.pp}pp (#${player.rank})`, 
+            name: `${player.name}: ${player.pp.toLocaleString('en-US')}pp (#${player.rank})`, 
             iconURL: URLS.fubikaIcon,
             url: player.url
         })

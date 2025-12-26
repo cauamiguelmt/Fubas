@@ -23,7 +23,7 @@ export default {
 
             const embeds = await leaderboardEmbedsBuilder(beatmap)
 
-            await embedPagination(interaction, embeds, "", false, 60000);
+            await embedPagination(interaction, embeds, "", false, 60000)
         
         }catch(error){
 

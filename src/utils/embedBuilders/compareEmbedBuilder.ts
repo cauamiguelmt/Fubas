@@ -26,7 +26,7 @@ export default async function compareEmbedBuilder(beatmap: IBeatmap, player: IPl
     if (!score)        
         return new EmbedBuilder()
             .setAuthor({ 
-            name: `${player.name}: ${player.pp}pp (#${player.rank})`, 
+            name: `${player.name}: ${player.pp.toLocaleString('en-US')}pp (#${player.rank})`, 
             iconURL: URLS.fubikaIcon,
             url: player.url
             })
