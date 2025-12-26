@@ -1,4 +1,5 @@
 import osuApiClient from "./axiosClient"
+import getApiErrorMessage from "./errorHandler"
 import { IBeatmap, IPlayer, IScore } from "../interfaces/interfaces.export"
 
 export async function getPlayer(id: string): Promise<IPlayer>{
@@ -6,34 +7,29 @@ export async function getPlayer(id: string): Promise<IPlayer>{
     try{
         const response = await osuApiClient.get(`user/${id}`)
 
-        if(response.status != 200){
-            throw new Error(response.data.error)
-        }
 
         return response.data
 
     }catch(error){
+        const message = getApiErrorMessage(error)
 
-        console.error("Erro no player: ", error)
-        throw new Error("Erro no player: " + String(error))
+        console.log("Erro no getPlayer:", message)
+        throw new Error(message)
     }
 }
 
-export async function getRecent(id: string): Promise<Array<IScore>>{
+export async function getRecentScore(id: string): Promise<Array<IScore>>{
     
     try{
         const response = await osuApiClient.get(`user/${id}/recent`)
 
-        if(response.status != 200){
-            throw new Error(response.data.error)
-        }
-
         return response.data
 
     }catch(error){
+        const message = getApiErrorMessage(error)
 
-        console.error("Erro nos scores: ", error)
-        throw new Error("Erro nos scores: " + String(error))
+        console.log("Erro no getRecentScore:", message)
+        throw new Error(message)
     }
 }
 
@@ -42,16 +38,13 @@ export async function getBeatmap(id: string): Promise<IBeatmap>{
     try{
         const response = await osuApiClient.get(`beatmap/${id}`)
 
-        if(response.status != 200){
-            throw new Error(response.data.error)
-        }
-
         return response.data
 
     }catch(error){
+        const message = getApiErrorMessage(error)
 
-        console.error("Erro no beatmap: ", error)
-        throw new Error("Erro no beatmap: " + String(error))
+        console.log("Erro no getBeatmap:", message)
+        throw new Error(message)
     }
 }
 
@@ -60,60 +53,49 @@ export async function getGlobalRanking(mode: number): Promise<Array<IPlayer>>{
     try{
         const response = await osuApiClient.get(`ranking/global?mode=${mode}`)
 
-        if(response.status != 200){
-            throw new Error(response.data.error)
-        }
-
         return response.data
 
     }catch(error){
+        const message = getApiErrorMessage(error)
 
-        console.error("Erro no ranking: ", error)
-        throw new Error("Erro no ranking: " + String(error))
+        console.log("Erro no getGlobalRanking:", message)
+        throw new Error(message)
     }
 }
 
 export async function postCreateLink(id: string, name: string) {
     
     try{
-        const response = await osuApiClient.post(`discord/createlink`,
-                                                                    {
-                                                                    discord_id: id,
-                                                                    osu_name: name
-                                                                    })
-
-        if(response.status != 200){
-            throw new Error(response.data.error)
-        }
+        const response = await osuApiClient.post(`discord/createlink`, {
+            discord_id: id,
+            osu_name: name
+        })
 
         return response.data
 
     }catch(error){
+        const message = getApiErrorMessage(error)
 
-        console.error("Erro na linkagem: ", error)
-        throw new Error("Erro na linkagem: " + String(error))
+        console.log("Erro no CreateLink:", message)
+        throw new Error(message)
     }
 }
 
 export async function postCheckLink(id: string, code: string) {
     
     try{
-        const response = await osuApiClient.post(`discord/checklink`,
-                                                                    {
-                                                                    discord_id: id,
-                                                                    code: code
-                                                                    })
-
-        if(response.status != 200){
-            throw new Error(response.data.error)
-        }
+        const response = await osuApiClient.post(`discord/checklink`, {
+            discord_id: id,
+            code: code
+        })
 
         return response.data
 
     }catch(error){
+        const message = getApiErrorMessage(error)
 
-        console.error("Erro na autorização: ", error)
-        throw new Error("Erro na autorização: " + String(error))
+        console.log("Erro no CheckLink:", message)
+        throw new Error(message)
     }
 }
 
@@ -122,15 +104,12 @@ export async function postInvite(id: string) {
     try{
         const response = await osuApiClient.post(`invite/create`, { id: id })
 
-        if(response.status != 201){
-            throw new Error(response.data.error)
-        }
-
         return response.data
 
     }catch(error){
+        const message = getApiErrorMessage(error)
 
-        console.error("Erro no invite: ", error)
-        throw new Error("Erro no invite: " + String(error))
+        console.log("Erro no postInvite:", message)
+        throw new Error(message)
     }
 }

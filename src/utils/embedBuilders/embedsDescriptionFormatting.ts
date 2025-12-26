@@ -16,7 +16,6 @@ export function scoreGradeToEmoji(scoreGrade: string): string {
     return gradeMap[scoreGrade] ?? '';
 }
 
-
 export function applyModsToStats(bpm: number, lengthSeconds: number, mods: string) {
     let speedMultiplier = 1
 

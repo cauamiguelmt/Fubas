@@ -3,10 +3,9 @@ import { IPlayer, IScore } from "../../interfaces/interfaces.export"
 import { URLS, EMOJIS, COLORS } from "../../constants"
 import { scoreGradeToEmoji, applyModsToStats, formatTime, capitalizeFirstLetter } from "../utils.export"
 
-export default async function recentEmbedBuilder(player: IPlayer, score: IScore): Promise<EmbedBuilder> {
-
+export default async function recentEmbedBuilder(player: IPlayer, score: IScore): Promise<EmbedBuilder>{
     if (!score.beatmap)
-        throw new Error("Beatmap data is missing");
+        throw new Error("Beatmap data is missing")
 
     const tab = "\u2003"
     const options = {
@@ -17,7 +16,8 @@ export default async function recentEmbedBuilder(player: IPlayer, score: IScore)
     const { bpm, length } = applyModsToStats(beatmap.bpm, beatmap.total_length, score.mods)
     // DEFINIR DEPOIS COMO VÃO SER CALCULADOS CS, AR, OD, HP DO SCORE
     const scoreTopPlayRanking = (player.top_200?.findIndex(s => s.id === score.id) ?? -1) + 1
-    const displayPersonalBest = scoreTopPlayRanking <= 200 && score.grade != 'F' ? `### __Personal Best #${scoreTopPlayRanking}__` : ''
+    const displayIfRanked = beatmap.status !== 'ranked' ? ' (if ranked)' : ''
+    const displayPersonalBest = scoreTopPlayRanking <= 200 && score.grade !== 'F' ? `### __Personal Best #${scoreTopPlayRanking}${displayIfRanked}__` : ''
     const displayMods = score.mods === '' ? '' : `+${score.mods}`
     const displayPP = score.grade === 'F'
         ? `~~${score.pp.toLocaleString('en-US', options)}PP~~` // Crossed

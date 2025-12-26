@@ -1,6 +1,6 @@
 import { getPlayer } from "../../services/apiCalls";
 import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js"
-import { top200EmbedsBuilder, embedPagination, topIndexEmbedBuilder } from "../../utils/utils.export";
+import { top200EmbedsBuilder, embedPagination, topIndexEmbedBuilder, defaultEmbedBuilder, noIndexScoresEmbedBuilder } from "../../utils/utils.export";
 
 export default {
     data: new SlashCommandBuilder()
@@ -15,6 +15,7 @@ export default {
             option.setName('index')
                 .setDescription('Ranking da play')
                 .setRequired(false)
+                .setMaxValue(200)
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -27,9 +28,14 @@ export default {
                 : await getPlayer(insertedPlayer) // Player fornecido
 
             const insertedIndex = interaction.options.getNumber('index') // Pega o index fornecido (ou não) no comando
+            
             if (insertedIndex === null) {
                 const { embeds, attachment } = await top200EmbedsBuilder(player)
                 await embedPagination(interaction, embeds, "", false, 60000, attachment)
+            
+            }else if (insertedIndex > 200){
+                const embed = await defaultEmbedBuilder('Insira um index válido!')
+                return await interaction.reply({ embeds: [embed] })
             
             }else{
 
@@ -37,22 +43,29 @@ export default {
                     throw new Error("Scores data are missing")
 
                 const score = player.top_200[insertedIndex - 1]
+
                 if (!score) {
-                    await interaction.reply('Não há scores nesse index') // <--- fazer embed
-                    return
+                    const { embed, attachment } = await noIndexScoresEmbedBuilder(player)
+                    return await interaction.reply({
+                        embeds: [embed],
+                        files: [attachment]
+                    })
                 }
 
                 const embed = await topIndexEmbedBuilder(player, score, insertedIndex)
-
-                await interaction.reply({
-                    embeds: [embed]
-                })
-
+                await interaction.reply({ embeds: [embed] })
             }
-    
-        }catch(error){
 
-            await interaction.reply(String(error))
+        }catch(error){
+            let mensagem
+            if (String(error).includes('Usuário não encontrado')) // Player não encontrado
+                mensagem = `Player \`${interaction.options.getString('player')}\` não encontrado!`
+            else
+                mensagem = String(error) // Outro erro
+
+            const embed = await defaultEmbedBuilder(mensagem)
+
+            await interaction.reply({ embeds: [embed] })
         }
     }
 }

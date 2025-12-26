@@ -4,6 +4,11 @@ import { URLS, EMOJIS, COLORS } from "../../constants"
 import { scoreGradeToEmoji, applyModsToStats, formatTime, capitalizeFirstLetter } from "../utils.export"
 
 export default async function compareEmbedBuilder(beatmap: IBeatmap, player: IPlayer): Promise<EmbedBuilder> {
+    
+    const tab = "\u2003"
+    const options = {
+        maximumFractionDigits: 2
+    }
 
     if (!beatmap.scores)
         throw new Error("Beatmap scores data are missing")
@@ -16,11 +21,6 @@ export default async function compareEmbedBuilder(beatmap: IBeatmap, player: IPl
         
         return score.player.id === player.id
     })
-
-    const tab = "\u2003"
-    const options = {
-        maximumFractionDigits: 2
-    }
 
     // Caso não haja scores do player no mapa
     if (!score)        

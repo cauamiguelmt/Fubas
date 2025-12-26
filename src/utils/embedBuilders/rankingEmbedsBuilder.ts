@@ -36,7 +36,11 @@ export default async function leaderboardEmbedsBuilder(players: Array<IPlayer>, 
                 // url: 
             })
             .setColor(COLORS.blue)
-            .setDescription("Nenhum jogador encontrado neste ranking.");
+            .setDescription("Ainda não há jogadores neste ranking!")
+            .setFooter({
+                text: `Page 1/1`, 
+                iconURL: getModeIcon(mode)
+            });
         embeds.push(embed)
         return embeds
     }
@@ -85,10 +89,10 @@ export default async function leaderboardEmbedsBuilder(players: Array<IPlayer>, 
             .setFooter({
                 text: `Page ${Math.floor(i / playersPerPage) + 1}/${Math.ceil(players.length / playersPerPage)}`, 
                 iconURL: getModeIcon(mode)
-            });
+            })
 
-        embeds.push(embed);
+        embeds.push(embed)
     }
 
-    return embeds;
+    return embeds
 }

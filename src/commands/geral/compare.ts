@@ -1,6 +1,6 @@
 import { getBeatmap, getPlayer } from "../../services/apiCalls"
 import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js"
-import { compareEmbedBuilder, extractBeatmapId } from "../../utils/utils.export";
+import { compareEmbedBuilder, defaultEmbedBuilder, extractBeatmapId } from "../../utils/utils.export";
 
 export default {
     data: new SlashCommandBuilder()
@@ -33,13 +33,20 @@ export default {
 
             const embed = await compareEmbedBuilder(beatmap, player)
 
-            await interaction.reply({
-                embeds: [embed]
-            })
+            await interaction.reply({ embeds: [embed] })
     
         }catch(error){
+            let mensagem
+            if (String(error).includes('Usuário não encontrado')) // Player não encontrado
+                mensagem = `Player \`${interaction.options.getString('player')}\` não encontrado!`
+            else if (String(error).includes('Not Found')) // Beatmap não encontrado
+                mensagem = 'Beatmap não encontrado!'
+            else
+                mensagem = String(error) // Outro erro
 
-            await interaction.reply(String(error))
+            const embed = await defaultEmbedBuilder(mensagem)
+
+            await interaction.reply({ embeds: [embed] })
         }
     }
 }

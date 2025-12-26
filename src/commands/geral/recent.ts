@@ -1,6 +1,6 @@
-import { getPlayer, getRecent } from "../../services/apiCalls"
+import { getPlayer, getRecentScore } from "../../services/apiCalls"
 import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js"
-import { recentEmbedBuilder, noRecentScoresEmbedBuilder } from "../../utils/utils.export";
+import { recentEmbedBuilder, noRecentScoresEmbedBuilder, defaultEmbedBuilder } from "../../utils/utils.export";
 
 export default {
     data: new SlashCommandBuilder()
@@ -22,8 +22,8 @@ export default {
                 : await getPlayer(insertedPlayer) // Player fornecido
 
             const [ score ] = (insertedPlayer === null)
-                ? await getRecent(interaction.user.id) // Player não foi fornecido
-                : await getRecent(insertedPlayer) // Player fornecido
+                ? await getRecentScore(interaction.user.id) // Player não foi fornecido
+                : await getRecentScore(insertedPlayer) // Player fornecido
 
             // Caso o player ainda não possua scores
             if (!score) { 
@@ -38,13 +38,18 @@ export default {
             
             const embed = await recentEmbedBuilder(player, score)
 
-            await interaction.reply({
-                embeds: [embed]
-            })
+            await interaction.reply({ embeds: [embed] })
     
         }catch(error){
+            let mensagem
+            if (String(error).includes('Usuário não encontrado')) // Player não encontrado
+                mensagem = `Player \`${interaction.options.getString('player')}\` não encontrado!`
+            else
+                mensagem = String(error) // Outro erro
 
-            await interaction.reply(String(error))
+            const embed = await defaultEmbedBuilder(mensagem)
+
+            await interaction.reply({ embeds: [embed] })
         }
     }
 }

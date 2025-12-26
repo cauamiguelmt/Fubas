@@ -19,9 +19,9 @@ export default {
             const insertedNick = interaction.options.getString('nick', true); // Pega o nick fornecido no comando
             const { success, message } = await postCreateLink(interaction.user.id, insertedNick)
             
-            const mensagemComplemento = success ? '\nProssiga utilizando \`/auth\` para inserir o código!' : ''
+            const messageComplement = success ? '\nProssiga utilizando \`/auth\` para inserir o código!' : ''
 
-            const embed = await defaultEmbedBuilder(message + mensagemComplemento)
+            const embed = await defaultEmbedBuilder(message + messageComplement)
             
             await interaction.reply({
                 ephemeral: true,
@@ -29,8 +29,14 @@ export default {
             })
 
         }catch(error){
+            const message = String(error)
 
-            await interaction.reply(String(error))
+            const embed = await defaultEmbedBuilder(message)
+
+            await interaction.reply({
+                ephemeral: true,
+                embeds: [embed]
+            })
         }
     }
 }

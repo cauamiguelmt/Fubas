@@ -19,9 +19,9 @@ export default {
             const insertedCode = interaction.options.getString('code', true); // Pega o code fornecido no comando
             const { sucess, message } = await postCheckLink(interaction.user.id, insertedCode)
 
-            const mensagemComplemento = sucess ? '!' : ''
+            const messageComplement = sucess ? '!' : ''
 
-            const embed = await defaultEmbedBuilder(message + mensagemComplemento)
+            const embed = await defaultEmbedBuilder(message + messageComplement)
 
             await interaction.reply({
                 ephemeral: true,
@@ -29,8 +29,14 @@ export default {
             })
 
         }catch(error){
+            const message = String(error)
 
-            await interaction.reply(String(error))
+            const embed = await defaultEmbedBuilder(message)
+
+            await interaction.reply({
+                ephemeral: true,
+                embeds: [embed]
+            })
         }
     }
 }
