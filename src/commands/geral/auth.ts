@@ -1,6 +1,6 @@
 import { postCheckLink } from "../../services/apiCalls";
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
-import { URLS, COLORS } from "../../constants"
+import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js"
+import { defaultEmbedBuilder } from "../../utils/utils.export"
 
 export default {
     data: new SlashCommandBuilder()
@@ -16,18 +16,12 @@ export default {
 
         try{
             
-            const insertedCode = interaction.options.getString('code'); // Pega o code fornecido no comando
-            const { sucess, message } = await postCheckLink(interaction.user.id, String(insertedCode))
+            const insertedCode = interaction.options.getString('code', true); // Pega o code fornecido no comando
+            const { sucess, message } = await postCheckLink(interaction.user.id, insertedCode)
 
             const mensagemComplemento = sucess ? '!' : ''
 
-            const embed = new EmbedBuilder()
-            .setColor(COLORS.blue)
-            .setDescription(message + mensagemComplemento)
-            .setFooter({ 
-                text: 'on osu! Fubika\'s Server',
-                iconURL: URLS.fubikaIcon
-            });
+            const embed = await defaultEmbedBuilder(message + mensagemComplemento)
             
             await interaction.reply({
                 ephemeral: true,

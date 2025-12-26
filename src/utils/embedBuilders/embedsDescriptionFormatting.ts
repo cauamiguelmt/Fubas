@@ -1,3 +1,22 @@
+import { EMOJIS } from "../../constants"
+
+const gradeMap: Record<string, string> = {
+    'XH': EMOJIS.rankXH,
+    'X':  EMOJIS.rankX,
+    'SH': EMOJIS.rankSH,
+    'S':  EMOJIS.rankS,
+    'A':  EMOJIS.rankA,
+    'B':  EMOJIS.rankB,
+    'C':  EMOJIS.rankC,
+    'D':  EMOJIS.rankD,
+    'F':  EMOJIS.rankF
+}
+
+export function scoreGradeToEmoji(scoreGrade: string): string {
+    return gradeMap[scoreGrade] ?? '';
+}
+
+
 export function applyModsToStats(bpm: number, lengthSeconds: number, mods: string) {
     let speedMultiplier = 1
 
@@ -13,6 +32,7 @@ export function applyModsToStats(bpm: number, lengthSeconds: number, mods: strin
     };
 }
 
+
 export function formatTime(seconds: number): string {
     const hrs = Math.floor(seconds / 3600)
     const min = Math.floor((seconds % 3600) / 60)
@@ -25,4 +45,9 @@ export function formatTime(seconds: number): string {
     }
 
     return `${pad(min)}:${pad(sec)}`
+}
+
+
+export function capitalizeFirstLetter(s: string): string {
+    return s.charAt(0).toUpperCase() + s.slice(1);
 }

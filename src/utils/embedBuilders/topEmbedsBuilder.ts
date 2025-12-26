@@ -1,7 +1,7 @@
 import { EmbedBuilder, time, TimestampStyles } from "discord.js"
-import { IPlayer } from "../interfaces/interfaces.export"
-import { URLS, EMOJIS, COLORS } from "../constants"
-import { scoreGradeToEmoji } from "./utils.export"
+import { IPlayer } from "../../interfaces/interfaces.export"
+import { URLS, EMOJIS, COLORS } from "../../constants"
+import { scoreGradeToEmoji } from "../utils.export"
 
 export default async function topEmbedsBuilder(player: IPlayer): Promise<Array<EmbedBuilder>>{
     

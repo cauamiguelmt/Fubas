@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 import { Client, Collection, GatewayIntentBits } from 'discord.js'
 import * as dotenv from 'dotenv'
 import path from 'path'

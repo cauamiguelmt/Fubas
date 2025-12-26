@@ -1,13 +1,14 @@
 import { EmbedBuilder, time, TimestampStyles } from "discord.js"
-import { IBeatmap, IPlayer } from "../interfaces/interfaces.export"
-import { URLS, EMOJIS, COLORS } from "../constants"
-import { scoreGradeToEmoji, applyModsToStats, formatTime } from "./utils.export"
+import { IBeatmap, IPlayer } from "../../interfaces/interfaces.export"
+import { URLS, EMOJIS, COLORS } from "../../constants"
+import { scoreGradeToEmoji, applyModsToStats, formatTime, capitalizeFirstLetter } from "../utils.export"
 
 export default async function compareEmbedBuilder(beatmap: IBeatmap, player: IPlayer): Promise<EmbedBuilder> {
 
     if (!beatmap.scores)
         throw new Error("Beatmap scores data is missing")
 
+    // Procura um score do player no mapa
     const score = beatmap.scores.find(score => {
                 
         if (!score.player)
@@ -16,33 +17,45 @@ export default async function compareEmbedBuilder(beatmap: IBeatmap, player: IPl
         return score.player.id === player.id
     })
 
-    if (!score)
-        throw new Error("No matching score found") // <--- Trocar por um embed de não há scores do jogador no mapa
-    if (!score.player)
-        throw new Error("Player data are missing")
-        
-
     const tab = "\u2003"
     const options = {
         maximumFractionDigits: 2
     }
 
-    let bpm: number = beatmap.bpm
-    let length: number = beatmap.total_length
-    applyModsToStats(bpm, length, score.mods)
+    // Caso não haja scores do player no mapa
+    if (!score)        
+        return new EmbedBuilder()
+            .setAuthor({ 
+            name: `${player.name}: ${player.pp}pp (#${player.rank})`, 
+            iconURL: URLS.fubikaIcon,
+            url: player.url
+            })
+            .setTitle(`${beatmap.title} [${beatmap.diff}] [${beatmap.star_rating.toLocaleString('en-US', options)}★]`)
+            .setURL(beatmap.url)
+            .setColor(COLORS.blue)
+            .setThumbnail(beatmap.cover)
+            .setDescription('Este player ainda não possui scores no mapa!')
+            .setFooter({ 
+                text: `Mapset by ${beatmap.author_name} • ${capitalizeFirstLetter(beatmap.status)}`,
+            })
+
+    if (!score.player)
+        throw new Error("Player data are missing")
+
+
+    const { bpm, length } = applyModsToStats(beatmap.bpm, beatmap.total_length, score.mods)
     // DEFINIR DEPOIS COMO VÃO SER CALCULADOS CS, AR, OD, HP DO SCORE
-    let cs = 4.2, ar = 9.2, od = 9.2, hp = 5.2 // <---
     // + OTHERS SCORES ON THE BEATMAP POSTERIORMENTE
 
     const scoreTopPlayRanking = (player.top_200?.findIndex(s => s.id === score.id) ?? -1) + 1
-    const displayPersonalBest = scoreTopPlayRanking <= 200 && scoreTopPlayRanking > 0 ? `### __Personal Best #${scoreTopPlayRanking}__` : " "
+    const displayPersonalBest = scoreTopPlayRanking <= 200 && score.grade != 'F' ? `### __Personal Best #${scoreTopPlayRanking}__` : ''
     const displayMods = score.mods === '' ? '' : `+${score.mods}`
 
     return new EmbedBuilder()
         .setAuthor({ 
-            name: `${score.player.name}: ${score.player.pp}pp (#${score.player.rank})`, 
+            name: `${player.name}: ${player.pp}pp (#${player.rank})`, 
             iconURL: URLS.fubikaIcon,
-            url: score.player.url
+            url: player.url
         }) //                                       Mudar --->  score.star_rating.toLocaleString('en-US', options)}
         .setTitle(`${beatmap.title} [${beatmap.diff}] [${beatmap.star_rating.toLocaleString('en-US', options)}★]`)
         .setURL(beatmap.url)
@@ -52,9 +65,9 @@ export default async function compareEmbedBuilder(beatmap: IBeatmap, player: IPl
 ${displayPersonalBest}
 ${scoreGradeToEmoji(score.grade)} **${displayMods}${tab}${score.score.toLocaleString('en-US')}${tab}${score.acc.toLocaleString('en-US', options)}%**${tab}${time(new Date(score.play_time), TimestampStyles.RelativeTime)}
 **${score.pp.toLocaleString('en-US', options)}PP** • **${score.max_combo}x**/${beatmap.max_combo}x • ${score.nmiss}${EMOJIS.miss}
-\`${formatTime(length)}\` • \`${bpm}\` BPM • \`CS: ${cs} AR: ${ar} OD: ${od} HP: ${hp}\`
+\`${formatTime(length)}\` • \`${bpm}\` BPM • \`CS: ${beatmap.cs} AR: ${beatmap.ar} OD: ${beatmap.od} HP: ${beatmap.hp}\`
         `) // Mudar o campo do PP para **${score.pp.toLocaleString('en-US', options)}**/${score.maxPP.toLocaleString('en-US', options)}PP quando tiver maxPP no objeto score
         .setFooter({ 
-            text: `Mapset by ${beatmap.author_name} • ${beatmap.status}`,
+            text: `Mapset by ${beatmap.author_name} • ${capitalizeFirstLetter(beatmap.status)}`,
         });
 }

@@ -1,5 +1,5 @@
 export const URLS = {
-    fubikaIcon: 'https://iili.io/fcDwBEJ.png',
+    fubikaIcon: 'https://i.imgur.com/F7FEYaG.png',
     greenDot: 'https://www.freepnglogos.com/uploads/dot-png/green-dot-clip-art-clkerm-vector-clip-art-online-10.png',
     redDot: 'https://www.freepnglogos.com/uploads/dot-png/red-glossy-dot-clip-art-clkerm-vector-clip-art-18.png'
 } as const;
@@ -14,11 +14,11 @@ export const EMOJIS = {
     rankB: "<:rankingBsmall2x:1451026536512753727>",
     rankC: "<:rankingCsmall2x:1451026570037956698>",
     rankD: "<:rankingDsmall2x:1451026596986355803>",
-    rankF: "**rankF**", // <--- Alterar
+    rankF: "<:rankingFsmall2x:1453913665278316626>",
 
     // Others
     miss: "<:miss:1451028123553497281>",
-    bpm: "BPM" // <--- Alterar
+    bpm: "BPM"
 } as const;
 
 export const COLORS = { // Cores utilizadas no fubika

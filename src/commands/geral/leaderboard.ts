@@ -1,14 +1,14 @@
 import { getBeatmap } from "../../services/apiCalls";
 import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js"
-import { leaderboardEmbedsBuilder, embedPagination } from "../../utils/utils.export";
+import { leaderboardEmbedsBuilder, embedPagination, extractBeatmapId } from "../../utils/utils.export";
 
 export default {
     data: new SlashCommandBuilder()
         .setName('leaderboard')
-        .setDescription('Mostra a leaderboard de um beatmap')
+        .setDescription('Exibe a leaderboard de um beatmap')
         .addStringOption(option => 
             option.setName('beatmap')
-                .setDescription('Link do beatmap (id por enquanto)') // <--- Alterar
+                .setDescription('Link ou ID do beatmap')
                 .setRequired(true)
         ),
 
@@ -16,8 +16,10 @@ export default {
         
         try{
         
-            const insertedBeatmap = interaction.options.getString('beatmap'); // Pega o beatmap fornecido no comando
-            const beatmap = await getBeatmap(String(insertedBeatmap))
+            const insertedBeatmap = interaction.options.getString('beatmap', true) // Pega o link ou id do beatmap fornecido no comando
+            const beatmap = (insertedBeatmap.includes('/'))
+                ? await getBeatmap(await extractBeatmapId(insertedBeatmap)) // Extrai ID caso seja link
+                : await getBeatmap(insertedBeatmap) // Já é o ID
 
             const embeds = await leaderboardEmbedsBuilder(beatmap)
 

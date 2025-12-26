@@ -1,22 +1,31 @@
 import { getPlayer } from "../../services/apiCalls"
-import { SlashCommandBuilder, CommandInteraction } from "discord.js"
+import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js"
 import { userEmbedBuilder } from "../../utils/utils.export"
 
 export default {
     data: new SlashCommandBuilder()
         .setName('user')
-        .setDescription('Mostra seu perfil de osu! no Fubika'),
+        .setDescription('Exibe um perfil de osu! no Fubika')
+        .addStringOption(option => 
+            option.setName('player')
+                .setDescription('Nick do player')
+                .setRequired(false)
+        ),
 
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         
         try{
 
-            const player = await getPlayer(interaction.user.id)
+            const insertedPlayer = interaction.options.getString('player') // Pega o player fornecido (ou não) no comando
+            const player = (insertedPlayer == null)
+                ? await getPlayer(interaction.user.id) // Player não foi fornecido
+                : await getPlayer(insertedPlayer) // Player fornecido
 
-            const embed = await userEmbedBuilder(player)        
+            const { embed, attachment } = await userEmbedBuilder(player)     
 
             await interaction.reply({
-                embeds: [embed]
+                embeds: [embed],
+                files: [attachment]
             })
 
         }catch(error){

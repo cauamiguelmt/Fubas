@@ -1,25 +1,26 @@
-import { EmbedBuilder } from "discord.js"
-import { IPlayer } from "../interfaces/interfaces.export"
-import { URLS, EMOJIS, COLORS } from "../constants"
+import { EmbedBuilder, AttachmentBuilder } from "discord.js"
+import { IPlayer } from "../../interfaces/interfaces.export"
+import { URLS, EMOJIS, COLORS } from "../../constants"
 
-export default async function userEmbedBuilder(player: IPlayer): Promise<EmbedBuilder> {
+export default async function userEmbedBuilder(player: IPlayer): Promise<{ embed: EmbedBuilder, attachment: AttachmentBuilder }> {
 
     const options = {
         maximumFractionDigits: 2 
     };
 
-    const displayLastActivity = player.last_activity === "Online" ? "Online on osu! Fubika" : `Última vez visto ${player.last_activity} no Fubika`
+    const avatarAttachment = new AttachmentBuilder(player.pfp, { name: 'profile.png' })
+    const displayLastActivity = player.last_activity === "Online" ? "Online no Fubika" : `Última vez online ${player.last_activity} no Fubika`
     const displayLastActivityIcon = player.last_activity === "Online" ? URLS.greenDot  : URLS.redDot
     const displayPlaytime = player.playtime < 3600 ? `${Math.round(player.playtime / 60)} mins` : `${Math.round(player.playtime / 3600)} hrs`
 
-    return new EmbedBuilder()
+    const embed = new EmbedBuilder()
         .setAuthor({ 
             name: `osu! Standard Profile for ${player.name}`, 
             iconURL: URLS.fubikaIcon,
             url: player.url
         })
         .setColor(COLORS.blue)
-        .setThumbnail(player.pfp)
+        .setThumbnail('attachment://profile.png')
         .setDescription(`
 • **Fubika Rank:** \`#${player.rank}\`
 • **PP:** \`${player.pp.toLocaleString('en-US', options)}\` • **Acc:** \`${player.acc.toLocaleString('en-US', options)}%\`
@@ -31,4 +32,6 @@ export default async function userEmbedBuilder(player: IPlayer): Promise<EmbedBu
             text: displayLastActivity, 
             iconURL: displayLastActivityIcon
         });
+
+    return { embed, attachment: avatarAttachment }
 }

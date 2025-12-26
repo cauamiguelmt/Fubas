@@ -1,5 +1,5 @@
 import osuApiClient from "./axiosClient"
-import { IBeatmap, IPlayer } from "../interfaces/interfaces.export"
+import { IBeatmap, IPlayer, IScore } from "../interfaces/interfaces.export"
 
 export async function getPlayer(id: string): Promise<IPlayer>{
     
@@ -16,6 +16,24 @@ export async function getPlayer(id: string): Promise<IPlayer>{
 
         console.error("Erro no player: ", error)
         throw new Error("Erro no player: " + String(error))
+    }
+}
+
+export async function getRecent(id: string): Promise<Array<IScore>>{
+    
+    try{
+        const response = await osuApiClient.get(`user/${id}/recent`)
+
+        if(response.status != 200){
+            throw new Error(response.data.error)
+        }
+
+        return response.data
+
+    }catch(error){
+
+        console.error("Erro nos scores: ", error)
+        throw new Error("Erro nos scores: " + String(error))
     }
 }
 
@@ -46,7 +64,7 @@ export async function postCreateLink(id: string, name: string) {
                                                                     osu_name: name
                                                                     })
 
-        if(response.status != 201){
+        if(response.status != 200){
             throw new Error(response.data.error)
         }
 
@@ -68,7 +86,7 @@ export async function postCheckLink(id: string, code: string) {
                                                                     code: code
                                                                     })
 
-        if(response.status != 201){
+        if(response.status != 200){
             throw new Error(response.data.error)
         }
 
