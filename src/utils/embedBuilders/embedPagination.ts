@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, ComponentType, EmbedBuilder, Message, AttachmentBuilder } from 'discord.js'
 
-export default async function embedPagination(interaction: CommandInteraction | Message, pages: EmbedBuilder[], string: string = "", disapear: boolean = false, time: number = 40000, attachment?: AttachmentBuilder) {
+export default async function embedPagination(interaction: CommandInteraction | Message, pages: EmbedBuilder[], string: string = "", disapear: boolean = false, time: number = 40000, attachment?: AttachmentBuilder): Promise<void> {
     
     if (!interaction || !pages || pages.length === 0) {
         if (interaction instanceof CommandInteraction) {
@@ -15,9 +15,11 @@ export default async function embedPagination(interaction: CommandInteraction | 
     if (pages.length === 1) {
         if (interaction instanceof CommandInteraction) {
             const replyMethod = (interaction.deferred || interaction.replied) ? 'editReply' : 'reply';
-            return await interaction[replyMethod]({ content: string, embeds: [pages[0]!.data], components: [], files: attachment ? [attachment] : [] });
+            await interaction[replyMethod]({ content: string, embeds: [pages[0]!.data], components: [], files: attachment ? [attachment] : [] });
+            return;
         } else {
-            return await interaction.reply({ content: string, embeds: [pages[0]!.data], components: [], files: attachment ? [attachment] : [] });
+            await interaction.reply({ content: string, embeds: [pages[0]!.data], components: [], files: attachment ? [attachment] : [] });
+            return;
         }
     }
 
@@ -100,7 +102,7 @@ export default async function embedPagination(interaction: CommandInteraction | 
             }
         })
 
-        return msg;
+        // return msg;
 
     } catch (e) {
         console.error("Erro na paginação: ", e);

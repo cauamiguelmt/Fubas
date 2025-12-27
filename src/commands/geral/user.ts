@@ -13,6 +13,7 @@ export default {
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
+        await interaction.deferReply()
         
         try{
 
@@ -23,7 +24,7 @@ export default {
 
             const { embed, attachment } = await userEmbedBuilder(player)     
 
-            await interaction.reply({
+            await interaction.editReply({
                 embeds: [embed],
                 files: [attachment]
             })
@@ -37,7 +38,7 @@ export default {
 
             const embed = await defaultEmbedBuilder(mensagem)
 
-            await interaction.reply({ embeds: [embed] })
+            await interaction.editReply({ embeds: [embed] })
         }
     }
 }

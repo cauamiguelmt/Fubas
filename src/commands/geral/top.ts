@@ -19,6 +19,7 @@ export default {
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
+        await interaction.deferReply()
         
         try{
         
@@ -35,7 +36,8 @@ export default {
             
             }else if (insertedIndex > 200){
                 const embed = await defaultEmbedBuilder('Insira um index válido!')
-                return await interaction.reply({ embeds: [embed] })
+                await interaction.editReply({ embeds: [embed] })
+                return
             
             }else{
 
@@ -46,14 +48,15 @@ export default {
 
                 if (!score) {
                     const { embed, attachment } = await noIndexScoresEmbedBuilder(player)
-                    return await interaction.reply({
+                    await interaction.editReply({
                         embeds: [embed],
                         files: [attachment]
                     })
+                    return
                 }
 
                 const embed = await topIndexEmbedBuilder(player, score, insertedIndex)
-                await interaction.reply({ embeds: [embed] })
+                await interaction.editReply({ embeds: [embed] })
             }
 
         }catch(error){
@@ -65,7 +68,7 @@ export default {
 
             const embed = await defaultEmbedBuilder(mensagem)
 
-            await interaction.reply({ embeds: [embed] })
+            await interaction.editReply({ embeds: [embed] })
         }
     }
 }

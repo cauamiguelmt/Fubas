@@ -1,5 +1,5 @@
 import { postCheckLink } from "../../services/apiCalls";
-import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js"
+import { SlashCommandBuilder, ChatInputCommandInteraction, MessageFlags } from "discord.js"
 import { defaultEmbedBuilder } from "../../utils/utils.export"
 
 export default {
@@ -13,6 +13,7 @@ export default {
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral })
 
         try{
             
@@ -23,7 +24,7 @@ export default {
 
             const embed = await defaultEmbedBuilder(message + messageComplement)
 
-            await interaction.reply({
+            await interaction.followUp({
                 ephemeral: true,
                 embeds: [embed]
             })
@@ -33,7 +34,7 @@ export default {
 
             const embed = await defaultEmbedBuilder(message)
 
-            await interaction.reply({
+            await interaction.followUp({
                 ephemeral: true,
                 embeds: [embed]
             })
