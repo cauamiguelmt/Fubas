@@ -1,5 +1,5 @@
 import { postInvite } from "../../services/apiCalls"
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from "discord.js"
+import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, MessageFlags } from "discord.js"
 import { URLS, COLORS } from "../../constants"
 
 export default {
@@ -8,6 +8,7 @@ export default {
         .setDescription('Cria um código de invite para o server do Fubika'),
 
     async execute(interaction: CommandInteraction) {
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral })
         
         try{
 
@@ -23,14 +24,14 @@ export default {
                 iconURL: URLS.fubikaIcon
             });
 
-            await interaction.reply({
+            await interaction.followUp({
                 ephemeral: true,
                 embeds: [embed]
             })
 
         }catch(error){
 
-            await interaction.reply(String(error))
+            await interaction.followUp(String(error))
         }
     }
 }
