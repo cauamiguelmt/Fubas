@@ -20,13 +20,14 @@ export default {
             const application_name = interaction.options.getString('application-name', true)
             const { key } = await postGenerateApiKey(interaction.user.id, application_name) 
 
-            await interaction.user.send(`Api key: ||**${key}**||\nNão compartilhe ela com outras pessoas!`)
+            const dmEmbed = await defaultEmbedBuilder(`▸**Api key:** ||**${key}**||`)
+            dmEmbed.setFooter({ text: 'Não compartilhe ela com outras pessoas!'})
+            await interaction.user.send({ embeds: [dmEmbed] })
 
-            const embed = await defaultEmbedBuilder('A api key gerada foi enviada para sua DM!')
-
+            const followUpEmbed = await defaultEmbedBuilder('A api key gerada foi enviada para sua DM!')
             await interaction.followUp({
                 ephemeral: true,
-                embeds: [embed]
+                embeds: [followUpEmbed]
             })
 
         }catch(error){
